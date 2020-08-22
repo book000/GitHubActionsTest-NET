@@ -22,5 +22,26 @@ jobs:
     - name: Build
       run: MSBuild.exe GitHubActionsTest-NET.sln /p:Configuration=Debug
     - name: Tree
-      run: tree .
-      shell: cmd
+      run: tree /f
+    - name: Set SHORT_SHA
+      id: vars
+      run: echo "::set-output name=SHORT_SHA::$(git rev-parse --short HEAD)"
+    - name: Create a Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.vars.outputs.SHORT_SHA }}
+        release_name: Release ${{ steps.vars.outputs.SHORT_SHA }}
+        draft: false
+        prerelease: false
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./GitHubActionsTest-NET/bin/GitHubActionsTest-NET.exe
+        asset_name: GitHubActionsTest-NET.exe
+        asset_content_type: application/octet-stream
