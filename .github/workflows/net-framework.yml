@@ -21,3 +21,4 @@ jobs:
       uses: microsoft/setup-msbuild@v1.0.1
     - name: Build
       run: MSBuild.exe GitHubActionsTest-NET.sln /p:Configuration:Debug,Platform="x64"
+
