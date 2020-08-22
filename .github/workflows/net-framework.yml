@@ -20,5 +20,7 @@ jobs:
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1.0.1
     - name: Build
-      run: MSBuild.exe GitHubActionsTest-NET.sln /p:Configuration=Debug,Platform="x64"
-
+      run: MSBuild.exe GitHubActionsTest-NET.sln /p:Configuration=Debug
+    - name: Tree
+      run: tree .
+      shell: cmd
